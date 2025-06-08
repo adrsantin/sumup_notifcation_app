@@ -1,4 +1,4 @@
-package users
+package entities
 
 import (
 	"testing"
@@ -13,9 +13,7 @@ func Test_IsValidNotificationType(t *testing.T) {
 		expected bool
 	}{
 		{"Valid Email Notification", "email", true},
-		{"Valid Push Notification", "push", true},
 		{"Valid SMS Notification", "sms", true},
-		{"Valid Slack Notification", "slack", true},
 		{"Invalid Notification Type", "invalid", false},
 	}
 

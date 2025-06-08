@@ -20,13 +20,32 @@ services:
     container_name: go-mysql
     image: mysql:9.0
     ports:
-     - "8081:3306"
+     - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=sumup
-    # command: --init-file ./internal/resources/schema.sql
+    volumes:
+      - ./internal/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - go-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  
+  mysqltest:
+    container_name: go-mysql-test
+    image: mysql:9.0
+    ports:
+     - "3307:3307"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=sumup
     volumes:
       - ./internal/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:

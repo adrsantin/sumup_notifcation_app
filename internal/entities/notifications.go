@@ -1,19 +1,15 @@
-package users
+package entities
 
 type NotificationType string
 
 const (
 	EmailNotification NotificationType = "email"
-	PushNotification  NotificationType = "push"
 	SMSNotification   NotificationType = "sms"
-	SlackNotification NotificationType = "slack"
 )
 
 var validNotificationTypes = map[NotificationType]bool{
 	EmailNotification: true,
-	PushNotification:  true,
 	SMSNotification:   true,
-	SlackNotification: true,
 }
 
 func IsValidNotificationType(s string) bool {
@@ -21,8 +17,7 @@ func IsValidNotificationType(s string) bool {
 	return ok
 }
 
-type User struct {
-	ID                int                `json:"id"`
-	Email             string             `json:"email"`
-	NotificationTypes []NotificationType `json:"notification_types"`
+type NotificationDTO struct {
+	UserID int     `json:"user_id"`
+	Amount float64 `json:"amount"`
 }
