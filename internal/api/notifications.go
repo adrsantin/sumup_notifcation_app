@@ -35,7 +35,7 @@ func (n *notificationsAPIImpl) SendPaymentNotifications(w http.ResponseWriter, r
 		http.Error(w, "Failed to read request body", http.StatusBadRequest)
 		return
 	}
-	var notification entities.NotificationDTO
+	var notification entities.RequestDTO
 	err = json.Unmarshal(body, &notification)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
