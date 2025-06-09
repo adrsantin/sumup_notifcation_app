@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"sumup/notifications/internal/api"
 	"sumup/notifications/internal/business"
+	"sumup/notifications/internal/queue"
 	"sumup/notifications/internal/repositories"
 
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/go-chi/chi/v5"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -30,7 +32,19 @@ func load() *chi.Mux {
 
 	userRepository := repositories.NewUserRepository(db)
 
-	notificationService := business.NewNotificationService(userRepository)
+	p, err := kafka.NewProducer(&kafka.ConfigMap{
+		"bootstrap.servers": "go-kafka:9092",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	producer := queue.NewProducer(p)
+
+	notificationService := business.NewNotificationService(
+		userRepository,
+		producer,
+	)
 
 	api.NewHealthAPI(r)
 	api.NewNotificationsAPI(r, notificationService)
