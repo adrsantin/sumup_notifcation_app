@@ -12,6 +12,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
     networks:
       - go-network
 
@@ -51,6 +53,7 @@ services:
       retries: 5  
 
   kafka:
+    container_name: go-kafka
     image: confluentinc/cp-kafka:latest
     networks:
       - kafka-network

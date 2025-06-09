@@ -9,11 +9,13 @@ import (
 
 type notificationServiceDependencies struct {
 	userRepository *mocks.MockUserRepository
+	producer       *mocks.MockProducer
 }
 
 func newNotificationServiceDependencies() *notificationServiceDependencies {
 	return &notificationServiceDependencies{
 		userRepository: &mocks.MockUserRepository{},
+		producer:       &mocks.MockProducer{},
 	}
 }
 
@@ -36,7 +38,10 @@ func Test_SendPaymentNotifications(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			deps := newNotificationServiceDependencies()
-			service := NewNotificationService(deps.userRepository)
+			service := NewNotificationService(
+				deps.userRepository,
+				deps.producer,
+			)
 
 			args, want := tt.args(), tt.want()
 
