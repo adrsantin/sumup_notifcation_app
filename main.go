@@ -14,16 +14,13 @@ import (
 )
 
 func main() {
-
-	log.Println("Starting server...")
-	handler := loadAPIs()
+	router := load()
 
 	log.Println("Server is running on port 8080...")
-	http.ListenAndServe(":8080", handler)
-
+	http.ListenAndServe(":8080", router)
 }
 
-func loadAPIs() *chi.Mux {
+func load() *chi.Mux {
 	r := chi.NewRouter()
 
 	db, err := sql.Open("mysql", "root:password@tcp(go-mysql:3306)/sumup")
@@ -35,15 +32,8 @@ func loadAPIs() *chi.Mux {
 
 	notificationService := business.NewNotificationService(userRepository)
 
-	healthAPI := api.NewHealthAPI()
-	notificationsAPI := api.NewNotificationsAPI(
-		notificationService,
-	)
-
-	api.Routes(r,
-		healthAPI,
-		notificationsAPI,
-	)
+	api.NewHealthAPI(r)
+	api.NewNotificationsAPI(r, notificationService)
 
 	return r
 }

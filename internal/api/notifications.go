@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"sumup/notifications/internal/business"
 	"sumup/notifications/internal/entities"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type notificationsAPIImpl struct {
@@ -14,11 +16,16 @@ type notificationsAPIImpl struct {
 }
 
 func NewNotificationsAPI(
+	r *chi.Mux,
 	notificationService business.NotificationService,
 ) NotificationsAPI {
-	return &notificationsAPIImpl{
+	notificationsApi := &notificationsAPIImpl{
 		notificationService: notificationService,
 	}
+
+	r.Post("/notifications/send", notificationsApi.SendPaymentNotifications)
+
+	return notificationsApi
 }
 
 func (n *notificationsAPIImpl) SendPaymentNotifications(w http.ResponseWriter, r *http.Request) {
