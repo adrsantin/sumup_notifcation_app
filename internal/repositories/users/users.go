@@ -1,16 +1,17 @@
-package repositories
+package users
 
 import (
 	"database/sql"
 	"fmt"
 	"sumup/notifications/internal/entities"
+	"sumup/notifications/internal/repositories"
 )
 
 type userRepositoryImpl struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) UserRepository {
+func NewUserRepository(db *sql.DB) repositories.UserRepository {
 	return &userRepositoryImpl{
 		db: db,
 	}

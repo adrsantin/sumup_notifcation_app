@@ -16,6 +16,7 @@ services:
         condition: service_healthy
     networks:
       - go-network
+      - kafka-network
 
   mysql:
     container_name: go-mysql

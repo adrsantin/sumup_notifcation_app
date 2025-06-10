@@ -1,14 +1,14 @@
-package queue
+package publisher
 
 import (
 	"fmt"
+	"sumup/notifications/internal/queue"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 const (
-	KafkaServer = "localhost:9092"
-	KafkaTopic  = "notification_topic"
+	KafkaTopic = "notification_topic"
 )
 
 type producerImpl struct {
@@ -17,7 +17,7 @@ type producerImpl struct {
 
 func NewProducer(
 	kafkaProducer *kafka.Producer,
-) Producer {
+) queue.Producer {
 	return &producerImpl{
 		kafkaProducer: kafkaProducer,
 	}

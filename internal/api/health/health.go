@@ -1,8 +1,9 @@
-package api
+package health
 
 import (
 	"log"
 	"net/http"
+	"sumup/notifications/internal/api"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -11,7 +12,7 @@ type healthAPIImpl struct{}
 
 func NewHealthAPI(
 	r *chi.Mux,
-) HealthAPI {
+) api.HealthAPI {
 	healthApi := &healthAPIImpl{}
 
 	r.Get("/health", healthApi.Check)

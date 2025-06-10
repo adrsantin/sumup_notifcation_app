@@ -1,34 +1,35 @@
-package api
+package payments
 
 import (
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+	"sumup/notifications/internal/api"
 	"sumup/notifications/internal/business"
 	"sumup/notifications/internal/entities"
 
 	"github.com/go-chi/chi/v5"
 )
 
-type notificationsAPIImpl struct {
-	notificationService business.NotificationService
+type paymentsAPIImpl struct {
+	paymentsService business.PaymentService
 }
 
-func NewNotificationsAPI(
+func NewPaymentsAPI(
 	r *chi.Mux,
-	notificationService business.NotificationService,
-) NotificationsAPI {
-	notificationsApi := &notificationsAPIImpl{
-		notificationService: notificationService,
+	paymentsService business.PaymentService,
+) api.PaymentsAPI {
+	paymentsApi := &paymentsAPIImpl{
+		paymentsService: paymentsService,
 	}
 
-	r.Post("/notifications/send", notificationsApi.SendPaymentNotifications)
+	r.Post("/payments/notification", paymentsApi.SendPaymentNotifications)
 
-	return notificationsApi
+	return paymentsApi
 }
 
-func (n *notificationsAPIImpl) SendPaymentNotifications(w http.ResponseWriter, r *http.Request) {
+func (n *paymentsAPIImpl) SendPaymentNotifications(w http.ResponseWriter, r *http.Request) {
 	log.Println("SendPaymentNotifications endpoint hit")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -41,7 +42,7 @@ func (n *notificationsAPIImpl) SendPaymentNotifications(w http.ResponseWriter, r
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	err = n.notificationService.SendPaymentNotifications(notification.UserID, notification.Amount)
+	err = n.paymentsService.ProcessPaymentNotification(notification.UserID, notification.Amount)
 	if err != nil {
 		http.Error(w, "Failed to send notifications: "+err.Error(), http.StatusInternalServerError)
 		return
