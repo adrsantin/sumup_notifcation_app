@@ -4,6 +4,8 @@ Aplicação designada para envio de notificações de pagamentos realizados pelo
 
 ## Fluxo do sistema
 
+![Flow](diagram.png)
+
 - Existe um endpoint http: POST /payments/notification definido na camada de api. Esse endpoint recebe um body contendo um "user_id" do tipo inteiro e um "amount" de ponto decimal representando o valor do pagamento efetuado (1)
 - A api envia esses dados para a camada de serviço (2) que busca, através da camada do repositório os dados do usuário no banco de dados (3) e (4). Esses dados incluem os tipos de notificação que o usuário vai receber.
 - Essas informações são então enviadas, através de um Produtor, para um tópico do kafka (5) e (6).
