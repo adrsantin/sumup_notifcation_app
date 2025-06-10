@@ -8,6 +8,6 @@ type HealthAPI interface {
 	Check(w http.ResponseWriter, r *http.Request)
 }
 
-type NotificationsAPI interface {
+type PaymentsAPI interface {
 	SendPaymentNotifications(w http.ResponseWriter, r *http.Request)
 }

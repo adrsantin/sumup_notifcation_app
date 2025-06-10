@@ -1,29 +1,30 @@
-package business
+package payments
 
 import (
 	"encoding/json"
 	"fmt"
+	"sumup/notifications/internal/business"
 	"sumup/notifications/internal/entities"
 	"sumup/notifications/internal/queue"
 	"sumup/notifications/internal/repositories"
 )
 
-type notificationServiceImpl struct {
+type paymentServiceImpl struct {
 	userRepository repositories.UserRepository
 	producer       queue.Producer
 }
 
-func NewNotificationService(
+func NewPaymentService(
 	userRepository repositories.UserRepository,
 	producer queue.Producer,
-) NotificationService {
-	return &notificationServiceImpl{
+) business.PaymentService {
+	return &paymentServiceImpl{
 		userRepository: userRepository,
 		producer:       producer,
 	}
 }
 
-func (s *notificationServiceImpl) SendPaymentNotifications(userID int, amount float64) error {
+func (s *paymentServiceImpl) ProcessPaymentNotification(userID int, amount float64) error {
 	user, err := s.userRepository.GetUserDataByID(userID)
 	if err != nil {
 		return err
@@ -39,6 +40,7 @@ func (s *notificationServiceImpl) SendPaymentNotifications(userID int, amount fl
 			Name:             user.Name,
 			Email:            user.Email,
 			Phone:            user.Phone,
+			Amount:           amount,
 			NotificationType: notificationType,
 		}
 		messageBytes, err := json.Marshal(message)

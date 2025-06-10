@@ -1,4 +1,4 @@
-package repositories
+package users
 
 import (
 	"database/sql"
@@ -16,7 +16,7 @@ func Test_GetUserDataByID(t *testing.T) {
 	db, _ := sql.Open("sqlite3", ":memory:")
 	defer db.Close()
 
-	bytes, _ := os.ReadFile("test_data.sql")
+	bytes, _ := os.ReadFile("../test_data.sql")
 	sqlString := string(bytes)
 
 	db.Exec(sqlString)
